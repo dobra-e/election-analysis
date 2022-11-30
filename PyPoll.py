@@ -1,10 +1,3 @@
-# Data we need to retrieve
-# 1. the total number of votes cast
-# 2. a complete list of candidates who received votes
-# 3. the percentage of votes each candidate won
-# 4. the total number of votes each candidate won
-# 5. the winner of the election based on popular vote
-
 # dependencies
 import csv
 import os
@@ -35,14 +28,13 @@ with open(file_to_load) as election_data:
 
     # read and print the header row
     headers = next(file_reader)
-    print(headers)
 
     # print each row of the csv file
     for row in file_reader:
         # add to the total vote counter
         total_votes += 1
 
-        # get candidate names
+        # get candidate name for each row
         candidate_name = row[2]
 
         # check if candidate name exists in list
@@ -55,37 +47,48 @@ with open(file_to_load) as election_data:
         # add votes to each candidates vote count
         candidate_votes[candidate_name] += 1
 
-# print the total votes
-print(total_votes)
+# save results to text file
+with open(file_to_save, "w") as txt_file:
+    # print the final vote count to the terminal
+    election_results = (
+        f"\nElection Results\n"
+        f"---------------------\n"
+        f"Total Votes: {total_votes:,}\n"
+        f"---------------------\n")
+    print(election_results, end="")
+    # save the final vote count to the text file
+    txt_file.write(election_results)
 
-# print candidate names
-print(candidate_votes)
+    # determine percentage of votes for each candidate
+    # iterate through the candidate list
+    for candidate_name in candidate_votes:
+        # retrieve vote count for candidate
+        votes = candidate_votes[candidate_name]
+        # calculate percentage of votes
+        vote_percentage = float(votes) / float(total_votes) * 100
+        
+        # print candidate name and percentage of votes
+        candidate_results = (f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")
+        print(candidate_results)
 
-# determine percentage of votes for each candidate
+        # save candidate results to the text file
+        txt_file.write(candidate_results)
 
-# iterate through the candidate list
-for candidate_name in candidate_votes:
-    # retrieve vote count for candidate
-    votes = candidate_votes[candidate_name]
-    # calculate percentage of votes
-    vote_percentage = float(votes) / float(total_votes) * 100
-    
-    # print candidate name and percentage of votes
-    print(f"{candidate_name}: {vote_percentage:.1f}% ({votes:,})\n")   
-
-    # determine winning vote count and candidate
-    if (votes > winning_count) and (vote_percentage > winning_percentage):
-        # if true then set winning_count = votes an winning_percent = vote_percentage
-        winning_count = votes
-        winning_percentage = vote_percentage
-        # set winning_candidate = candidate's name
-        winning_candidate = candidate_name
-    
-# print winning candidate summary
-winning_candidate_summary = (
-    f"-----------------------\n"
-    f"Winner: {winning_candidate}\n"
-    f"Winning Vote Count: {winning_count:,}\n"
-    f"Winning Percentage: {winning_percentage:.1f}%\n"
-    f"-----------------------\n")
-print(winning_candidate_summary)
+        # determine winning vote count and candidate
+        if (votes > winning_count) and (vote_percentage > winning_percentage):
+            # if true then set winning_count = votes an winning_percent = vote_percentage
+            winning_count = votes
+            winning_percentage = vote_percentage
+            # set winning_candidate = candidate's name
+            winning_candidate = candidate_name
+        
+    # print winning candidate summary
+    winning_candidate_summary = (
+        f"-----------------------\n"
+        f"Winner: {winning_candidate}\n"
+        f"Winning Vote Count: {winning_count:,}\n"
+        f"Winning Percentage: {winning_percentage:.1f}%\n"
+        f"-----------------------\n")
+    print(winning_candidate_summary)
+    # save winning candidate summary to text file
+    txt_file.write(winning_candidate_summary)
