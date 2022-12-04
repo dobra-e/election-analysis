@@ -87,15 +87,31 @@ The analysis of the election shows that:
   - Diana DeGette, who received 73.8% of the vote with 272,892 votes.
 
 ## Summary
-With minor adjustments, the PyPoll_Challenge.py script could be applied to any election. To do so, the file path in the script would need to be updated to point to the new elections data file. For example, "Resources" would need to be changed to the correct folder name that holds the data file and "election_results.csv" would need to be updated to reflect the name of the data file.
+The audit of the Colorado congressional race was successfully completed using the automated python script. The script looped through each row to extract the county names, candidate names, and tabulate the number of votes for each as well as write the results to a text file. 
+
+With minor adjustments, the script could be applied to any election. Some of the adjustments may include updating the: 
+* file path to a different csv of election data
+* indexed columns to match the new dataset
+* variable names to match the new dataset
+* f-string text to reflect the specifics of the election 
+
+### File Path
+The file path in the script would need to be updated to point to the new elections data file. For example, "Resources" would need to be changed to the correct folder name that holds the data file and "election_results.csv" would need to be updated to reflect the name of the data file.
 ```
 file_to_load = os.path.join("Resources", "election_results.csv")
 ```
-Also, within the first `for` loop, the indexed column may need to be updated to match the location of the correct columns in the data file. For instance, if candidate names were listed in column 4 instead of column 3, the code would read:
+
+### Indexed Columns
+Within the first `for` loop, the indexed column may need to be updated to match the location of the correct columns in the data file. For instance, if candidate names were listed in column 4 instead of column 3, the code would read:
 ```
 for row in reader:
   candidate_name = row[3]
 ```
+
+### Variable Names
+If state election results opposed to county results were analyzed, variable names could be updated to match. For instance, `county_votes` could be updated to `state_votes`. Another option would be to use a more universal variable name such as `votingBlock_votes` for all elections.
+
+### F-string Text
 Finally, some of the f-string text output may need to be updated to reflect the characteristics of the election. For example, "Largest County Turnout" may need to be updated to "Largest District Turnout" for smaller, local elections.
 ```
 largest_county_turnout = (f"Largest County Turnout: {largest_turnout}\n")
