@@ -1,20 +1,78 @@
-# election-analysis
+# Election Analysis
 ## Project Overview
-A Colorado Board of Elections employee has given you the following task to complete the election audit of a recent local congressional election.
+Voters in a local congressional precinct cast their ballots by mail, punch cards, or direct recording electronic (DRE) counting machines. Votes are counted at the central office and the results are certified. A Colorado Board of Elections employee asked for an election audit of a recent local congressional election. The report must include: 
+* the total number of votes cast
+* the number and percentage of votes by county
+* the county with the highest voter turnout
+* a complete list of candidates who received votes
+* the total number and percentage of votes by candidate
+* the winner of the election based on popular vote
 
-1. Calculate the total number of votes cast.
-2. Get a complete list of candidates who received votes.
-3. Calculate the total number of votes each candidate received.
-4. Calculate the percentage of votes each candidate won.
-5. Determine the winner of the election based on popular vote.
+### Purpose
+The purpose of this project is to create an automated process to audit a local congressional election that can be applied to future congressional, senatorial, and local elections. A vote count report must be generated to certify the results of the election.
 
 ## Resources
 - Data source: election_results.csv
 - Software: Python 3.9.12, Visual Studio Code 1.73.1
 
-## Summary
+## Results
+### The Code
+The code utilized arrays, dictionaries, `for` loops, conditional statements, and f-strings to produce the output. 
+
+#### Total Votes
+First, `total_votes` was initialize and set to zero to store the vote count. Then, within a `for` loop, `total_votes` was increased by one for each row in the file:
+```
+for row in reader:
+total_votes = total + 1
+```
+
+#### County Results
+An empty array and dictionary, `county_list` and `county_votes`, respectively, were created. 
+```
+county_list = []
+county_votes = {}
+```
+Then, within the same `for` loop, the county name was extracted from each row in the file. 
+```
+county_name = row[1]
+```
+If the name was not already in `county_list`, it was appended. The votes per county was then tracked and increased by one for each row.
+```
+if county_name not in county_list:
+  county_list.append(county_name)
+  county_votes[county_name] = 0
+county_votes[county_name] += 1
+```
+`largest_turnout` and `largest_votecount` were initialized earlier in the script. Another `for` loop was then used to retreive the county from the dictionary, the vote count per county, percentage of votes per county, and the county with largest turnout. 
+```
+largest_turnout = ""
+largest_votecount = 0
+# ...
+for county_name in county_list:
+  votesCount = county_votes.get(county_name)
+  votesCount_percentage = float(votesCount)/float(total_votes)*100
+  
+  if (votesCount > largest_votecount):
+    largest_votecount = votesCount
+    largest_turnout = county_name
+```
+To write the results to a text file, a file was opened and a variable was created to hold f-strings with the results. For example: 
+```
+with open(file_to_save, "w") as txt_file:
+  # ...
+  county_results=(f"{county_name}: {votesCount_percentage:.1f}% ({votesCount:,})\n")
+  txt_file.write(county_results)
+```
+The same method was used to produce the candidate results. 
+
+### The Output
 The analysis of the election shows that:
-- There were 369,711 votes cast in the election.
+- There were 369,711 votes cast in the congressional election.
+- The county results were:
+  - Jefferson County cast 10.5% or 38,855 of the total votes.
+  - Denver County cast 82.8% or 306,055 of the total votes.
+  - Arapahoe County cast 6.7% or 24,801 of the total votes.
+  - The county with the largest voter turnout was Denver.
 - The candidates were:
   - Charles Casper Stockham
   - Diana DeGette
@@ -26,6 +84,5 @@ The analysis of the election shows that:
 - The winner of the election was:
   - Diana DeGette, who received 73.8% of the vote with 272,892 votes.
 
-## Challenge Overview
+## Summary
 
-## Challenge Summary
