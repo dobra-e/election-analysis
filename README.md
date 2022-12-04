@@ -23,7 +23,7 @@ The code utilized arrays, dictionaries, `for` loops, conditional statements, and
 First, `total_votes` was initialize and set to zero to store the vote count. Then, within a `for` loop, `total_votes` was increased by one for each row in the file:
 ```
 for row in reader:
-total_votes = total + 1
+  total_votes = total + 1
 ```
 
 #### County Results
