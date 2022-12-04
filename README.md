@@ -58,6 +58,8 @@ for county_name in county_list:
 ```
 To write the results to a text file, a file was opened and a variable was created to hold f-strings with the results. For example: 
 ```
+file_to_save = os.path.join("analysis", "election_analysis.txt")
+# ...
 with open(file_to_save, "w") as txt_file:
   # ...
   county_results=(f"{county_name}: {votesCount_percentage:.1f}% ({votesCount:,})\n")
@@ -85,4 +87,16 @@ The analysis of the election shows that:
   - Diana DeGette, who received 73.8% of the vote with 272,892 votes.
 
 ## Summary
-
+With minor adjustments, the PyPoll_Challenge.py script could be applied to any election. To do so, the file path in the script would need to be updated to point to the new elections data file. For example, "Resources" would need to be changed to the correct folder name that holds the data file and "election_results.csv" would need to be updated to reflect the name of the data file.
+```
+file_to_load = os.path.join("Resources", "election_results.csv")
+```
+Also, within the first `for` loop, the indexed column may need to be updated to match the location of the correct columns in the data file. For instance, if candidate names were listed in column 4 instead of column 3, the code would read:
+```
+for row in reader:
+  candidate_name = row[3]
+```
+Finally, some of the f-string text output may need to be updated to reflect the characteristics of the election. For example, "Largest County Turnout" may need to be updated to "Largest District Turnout" for smaller, local elections.
+```
+largest_county_turnout = (f"Largest County Turnout: {largest_turnout}\n")
+```
